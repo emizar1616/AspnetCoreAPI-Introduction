@@ -41,5 +41,29 @@ namespace AspnetCoreAPI_Introduction.Controllers
             var addedCity = await _cityRepository.CreateAsync(city);
             return Created(string.Empty , addedCity); // returns 201 status code
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] City city)
+        {
+            var entity = await _cityRepository.GetAsync(city.Id);
+            if (entity == null)
+            {
+                return NotFound(city.Id);
+            }
+            await _cityRepository.UpdateAsync(city);
+            return NoContent(); // returns 204 status code message. We usually prefer to use NoContent() method. Which means that there is no any value to turns .
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] int id)
+        {
+            var entity = await _cityRepository.GetAsync(id);
+            if(entity == null)
+            {
+                return NotFound(id);
+            }
+            await _cityRepository.DeleteAsync(entity);
+            return NoContent();
+        }
     }
 }
